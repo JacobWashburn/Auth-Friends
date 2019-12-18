@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
+import React,{useEffect} from 'react';
 import './App.css';
+import {Route} from 'react-router-dom';
+import {connect} from 'react-redux';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import PrivateRoute from './Utils/PrivateRoute';
+
+import FriendsList from './Components/FriendsList';
+import LoginPage from './Components/LoginPage';
+import Dashboard from './Components/Dashboard';
+import {getAllFriends} from './Actions';
+import AddFriendForm from './Components/Forms/AddFriendForm';
+import NavigationHeader from './Components/Navigation';
+
+function App (props) {
+    console.log('app props', props);
+   useEffect(() => {
+       props.getAllFriends()
+   },[props.loggedIn]);
+    return (
+        <div className='App'>
+            <Route path='/' component={NavigationHeader} />
+            <Route path='/login' component={LoginPage}/>
+            <PrivateRoute exact path='/' component={Dashboard}/>
+            <PrivateRoute path='/friends' component={FriendsList}/>
+            <PrivateRoute path='/addFriend' component={AddFriendForm}/>
+        </div>
+    );
 }
 
-export default App;
+const mapStateToProps = state => {
+    return {...state}
+}
+
+export default connect(mapStateToProps,{getAllFriends})(App);
