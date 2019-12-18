@@ -7,7 +7,11 @@ import {
     POST_LOGIN_FAILURE,
     POST_FRIEND_START,
     POST_FRIEND_SUCCESS,
-    POST_FRIEND_FAILURE
+    POST_FRIEND_FAILURE,
+    PUT_FRIEND_START,
+    PUT_FRIEND_SUCCESS,
+    PUT_FRIEND_FAILURE,
+    STOP_EDITING
 } from '../Actions';
 
 const initialState = {
@@ -73,6 +77,30 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 isPosting: false,
                 error: action.payload
+            };
+        case PUT_FRIEND_START:
+            return {
+                ...state,
+                isEditing: true,
+                editId: action.payload
+            };
+        case PUT_FRIEND_SUCCESS:
+            return {
+                ...state,
+                isEditing: false,
+                friendsList: action.payload
+            };
+        case PUT_FRIEND_FAILURE:
+            return {
+                ...state,
+                isEditing: false,
+                error: action.payload
+            };
+        case STOP_EDITING:
+            return {
+                ...state,
+                isEditing: false,
+                editId: ''
             };
         default:
             return state;
